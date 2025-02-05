@@ -5,4 +5,6 @@ from django.shortcuts import HttpResponse
 
 
 def index(request):
-    return HttpResponse("Hello World~")
+    return render(request, 'front/index.html', {
+
+    })
