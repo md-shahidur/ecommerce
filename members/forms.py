@@ -39,3 +39,31 @@ class SignUpForm(UserCreationForm):
 #         self.fields['password'].widget.attrs['class'] = "form-control form-control-lg"
 #         # self.fields['password2'].widget.attrs['class'] = "form-control form-control-lg"
 #         self.fields['email'].widget.attrs['class'] = "form-control form-control-lg"
+
+gen_choice = (
+    ('Not Mentions', 'Not Mentioned'),
+    ('Male', 'Male'),
+    ('Female', 'Female')
+)
+
+
+class EditProfileForm(forms.ModelForm):
+    gender = forms.TypedChoiceField(choices=gen_choice, widget=forms.Select(
+        attrs={'class': 'form-control form-control-lg', 'aria-label': "Default"}
+    ))
+
+    class Meta:
+        model = Profile
+        fields = ['first_name', 'last_name',
+                  'mobile', 'address', 'pro_pic']
+
+    def __init__(self, *args, **kwargs):
+        super(EditProfileForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].widget.attrs['class'] = "form-control form-control-lg"
+        self.fields['last_name'].widget.attrs['class'] = "form-control form-control-lg"
+        # self.fields['email'].widget.attrs['class'] = "form-control form-control-lg"
+        self.fields['mobile'].widget.attrs['class'] = "form-control form-control-lg"
+        self.fields['address'].widget.attrs['class'] = "form-control form-control-lg"
+        self.fields['pro_pic'].widget.attrs.update(
+            {'class': "form-control form-control-lg", 'type': 'file'}
+        )
