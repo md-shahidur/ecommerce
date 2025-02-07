@@ -9,7 +9,7 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = (
-            'username', 'password1', 'password2', 'email'
+            'username', 'password1', 'password2'
         )
 
     def __init__(self, *args, **kwargs):
@@ -18,7 +18,7 @@ class SignUpForm(UserCreationForm):
         # self.fields['username'].widget.attrs['id'] = "form3Example3cg"
         self.fields['password1'].widget.attrs['class'] = "form-control form-control-lg"
         self.fields['password2'].widget.attrs['class'] = "form-control form-control-lg"
-        self.fields['email'].widget.attrs['class'] = "form-control form-control-lg"
+        # self.fields['email'].widget.attrs['class'] = "form-control form-control-lg"
 
 
 # class SignUpForm(forms.Form):
@@ -41,7 +41,7 @@ class SignUpForm(UserCreationForm):
 #         self.fields['email'].widget.attrs['class'] = "form-control form-control-lg"
 
 gen_choice = (
-    ('Not Mentions', 'Not Mentioned'),
+    ('Not Mentioned', 'Not Mentioned'),
     ('Male', 'Male'),
     ('Female', 'Female')
 )
@@ -54,14 +54,14 @@ class EditProfileForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['first_name', 'last_name',
-                  'mobile', 'address', 'pro_pic']
+        fields = ['first_name', 'last_name', 'email',
+                  'gender', 'mobile', 'address', 'pro_pic']
 
     def __init__(self, *args, **kwargs):
         super(EditProfileForm, self).__init__(*args, **kwargs)
         self.fields['first_name'].widget.attrs['class'] = "form-control form-control-lg"
         self.fields['last_name'].widget.attrs['class'] = "form-control form-control-lg"
-        # self.fields['email'].widget.attrs['class'] = "form-control form-control-lg"
+        self.fields['email'].widget.attrs['class'] = "form-control form-control-lg"
         self.fields['mobile'].widget.attrs['class'] = "form-control form-control-lg"
         self.fields['address'].widget.attrs['class'] = "form-control form-control-lg"
         self.fields['pro_pic'].widget.attrs.update(

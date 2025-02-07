@@ -18,15 +18,24 @@
         <div class="col-12 col-md-9 col-lg-7 col-xl-6">
           <div class="card" style="border-radius: 15px;">
             <div class="card-body p-5">
-              <h2 class="text-uppercase text-center mb-5">Create an account</h2>
+              <h2 class="text-uppercase text-center mb-5">Welcome {{ user.username }}</h2>
 
-              <h4>User Name: {{ data.username }}</h4>
+              <!-- <h4>User Name: {{ data.username }}</h4> -->
               <h4>First Name: {{ data.profile.first_name }}</h4>
               <h4>Last Name: {{ data.profile.last_name }}</h4>
               <h4>E-Mail Address: {{ data.profile.email }}</h4>
+              <h4>Gender: {{ data.profile.gender }}</h4>
 
             </div>
-            <a href="{% url 'members:edit_profile' data.id %}">Edit Profile</a>
+            <div class="d-flex justify-content-center mb-3">
+              <!-- <button  type="submit" data-mdb-button-init
+                data-mdb-ripple-init class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Register</button> -->
+                <button  type="button" onclick="location.href = '{% url 'front:home' %}';" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body mx-2">Back to Home</button>
+                <button  type="button" onclick="location.href = '{% url 'members:edit_profile' data.id %}';" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body mx-2">Edit Profile</button>
+                <!-- <button  type="button" onclick="location.href = '{% url 'front:home' %}';" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body mx-2">Home</button> -->
+            </div>
+            <!-- <a href="{% url 'members:edit_profile' data.id %}">Edit Profile</a>
+            <a href="{% url 'members:logout' %}">Logout</a> -->
           </div>
         </div>
       </div>

@@ -8,9 +8,9 @@ class Profile(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
-    gender = models.CharField(max_length=6, null=True, blank=True)
-    # email = models.EmailField(
-    #     max_length=50, null=True, blank=True, unique=True)
+    gender = models.CharField(max_length=50, null=True, blank=True)
+    email = models.EmailField(
+        max_length=50, null=True, blank=True, unique=True)
     mobile = models.IntegerField(
         null=True, blank=True, unique=True)
     address = models.CharField(max_length=50, null=True, blank=True)
