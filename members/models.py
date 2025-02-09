@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 
 # Create your models here.
 
@@ -14,6 +15,9 @@ class Profile(models.Model):
     mobile = models.IntegerField(
         null=True, blank=True, unique=True)
     address = models.CharField(max_length=50, null=True, blank=True)
+
+    created_on = models.DateTimeField(default=datetime.datetime.now())
+    modified_on = models.DateTimeField(auto_now=True)
 
     pro_pic = models.ImageField(
         null=True, blank=True, upload_to='img/profile/')
