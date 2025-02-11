@@ -146,9 +146,10 @@
                                         <div class="col-md-6 col-lg-4 col-xl-3">
                                             <div class="rounded position-relative fruite-item">
                                                 <div class="fruite-img">
-                                                    <img src="{% static 'front/img/fruite-item-5.jpg' %}" class="img-fluid w-100 rounded-top" alt="">
+                                                    <!-- <img src="{% static 'front/img/fruite-item-5.jpg' %}" class="img-fluid w-100 rounded-top" alt=""> -->
+                                                    <img src="{{ item.image.url }}" class="img-fluid w-100 rounded-top" style="height: 214px;" alt="">
                                                 </div>
-                                                <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">{{ item.category }}</div>
+                                                <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">{{ item.category.name }}</div>
                                                 <div class="px-5 py-4 border border-secondary border-top-0 rounded-bottom">
                                                     <h4>{{ item.name }}</h4>
                                                     <!-- <p>{{ item.description }}</p> -->
@@ -297,7 +298,29 @@
                             <div class="row g-4">
                                 <div class="col-lg-12">
                                     <div class="row g-4">
-                                        <div class="col-md-6 col-lg-4 col-xl-3">
+                                        {% for item in items %}
+                                            {% if item.category.name == "Vegetables" %}
+                                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                                <div class="rounded position-relative fruite-item">
+                                                    <div class="fruite-img">
+                                                        <img src="{% static 'front/img/fruite-item-5.jpg' %}" class="img-fluid w-100 rounded-top" alt="">
+                                                    </div>
+                                                    <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">{{ item.category }}</div>
+                                                    <div class="px-5 py-4 border border-secondary border-top-0 rounded-bottom">
+                                                        <h4>{{ item.name }}</h4>
+                                                        <!-- <p>{{ item.description }}</p> -->
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <p class="text-dark fs-5 fw-bold mb-2">${{ item.price }} / kg</p>
+                                                            <a href="#" class="btn border border-secondary rounded-pill px-1 text-primary mb-3"><i class="fa fa-shopping-bag me-2 text-primary"></i>Details</a>
+                                                            <a href="#" class="btn border border-secondary rounded-pill px-1 text-primary mb-3"><i class="fa fa-shopping-bag me-2 text-primary"></i>Add to cart</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            {% endif %}
+                                        {% endfor %}
+                                        <!-- <div class="col-md-6 col-lg-4 col-xl-3">
                                             <div class="rounded position-relative fruite-item">
                                                 <div class="fruite-img">
                                                     <img src="{% static 'front/img/fruite-item-5.jpg' %}" class="img-fluid w-100 rounded-top" alt="">
@@ -312,8 +335,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6 col-lg-4 col-xl-3">
+                                        </div> -->
+                                        <!-- <div class="col-md-6 col-lg-4 col-xl-3">
                                             <div class="rounded position-relative fruite-item">
                                                 <div class="fruite-img">
                                                     <img src="{% static 'front/img/fruite-item-2.jpg' %}" class="img-fluid w-100 rounded-top" alt="">
@@ -328,7 +351,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -337,7 +360,31 @@
                             <div class="row g-4">
                                 <div class="col-lg-12">
                                     <div class="row g-4">
-                                        <div class="col-md-6 col-lg-4 col-xl-3">
+
+                                        {% for item in items  %}
+                                            {% if item.category.name == 'Fruits' %}
+                                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                                <div class="rounded position-relative fruite-item">
+                                                    <div class="fruite-img">
+                                                        <img src="{% static 'front/img/fruite-item-5.jpg' %}" class="img-fluid w-100 rounded-top" alt="">
+                                                    </div>
+                                                    <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">{{ item.category }}</div>
+                                                    <div class="px-5 py-4 border border-secondary border-top-0 rounded-bottom">
+                                                        <h4>{{ item.name }}</h4>
+                                                        <!-- <p>{{ item.description }}</p> -->
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <p class="text-dark fs-5 fw-bold mb-2">${{ item.price }} / kg</p>
+                                                            <a href="#" class="btn border border-secondary rounded-pill px-1 text-primary mb-3"><i class="fa fa-shopping-bag me-2 text-primary"></i>Details</a>
+                                                            <a href="#" class="btn border border-secondary rounded-pill px-1 text-primary mb-3"><i class="fa fa-shopping-bag me-2 text-primary"></i>Add to cart</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                
+                                            {% endif %}
+                                        {% endfor %}
+                                        
+                                        <!-- <div class="col-md-6 col-lg-4 col-xl-3">
                                             <div class="rounded position-relative fruite-item">
                                                 <div class="fruite-img">
                                                     <img src="img/fruite-item-1.jpg" class="img-fluid w-100 rounded-top" alt="">
@@ -368,7 +415,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>

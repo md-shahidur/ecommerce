@@ -9,6 +9,7 @@ def index(request):
     all_items = Item.objects.all()
     for item in all_items:
         print(item.price)
+        print(item.category, type(item.category))
     return render(request, 'front/index.html', {
         'items': all_items
 
