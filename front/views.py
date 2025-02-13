@@ -14,3 +14,12 @@ def index(request):
         'items': all_items
 
     })
+
+
+def item_detail(request, item_id):
+    print(item_id)
+    item = Item.objects.get(id=item_id)
+    print(item)
+    return render(request, 'front/shop-detail.html', {
+        'item': item
+    })

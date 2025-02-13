@@ -18,8 +18,11 @@ def cart_detail(request, user_id):
     })
 
 
+@login_required
 def cart_add(request):
-    pass
+    if request.POST == 'POST':
+        user_id = request.POS['user_id']
+        quantity = request.POST['quantity']
 
 
 def cart_delete(request):
