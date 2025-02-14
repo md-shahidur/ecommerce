@@ -1,7 +1,9 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 from django.shortcuts import get_list_or_404
 from django.contrib.auth.decorators import login_required
 from .models import CartItem
+from front.models import Item
 
 
 # Create your views here.
@@ -20,9 +22,22 @@ def cart_detail(request, user_id):
 
 @login_required
 def cart_add(request):
-    if request.POST == 'POST':
-        user_id = request.POS['user_id']
-        quantity = request.POST['quantity']
+    if request.user.is_authenticated:
+
+        if request.method == 'POST':
+            user = request.user
+            quantity = request.POST['quantity']
+            item_id = int(request.POST['item_id'])
+            item = Item.objects.get(id=item_id)
+            print(type(user), quantity, type(item))
+            cart_entry = CartItem(item=item, quantity=int(
+                quantity), user=user)
+            cart_entry.save()
+            # return HttpResponse('Item Added to Cart.')
+        else:
+            print('Not Working')
+    msg = {'result': 'Item Added to Cart'}
+    return JsonResponse(msg)
 
 
 def cart_delete(request):

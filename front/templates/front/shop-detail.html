@@ -522,10 +522,24 @@
                 $('#addtocartbtn').click(function(){
                     let x = $('#quantity').val();
                     let y = $('#user_id').val();
+                    let a = $('#item_id').val();
                     console.log(
                         'quantity:', x,
                         'user_id:', y,
+                        'item_id:', a,
                     );
+                    $.ajax({
+                        type: "POST",
+                        // contentType: "application/json; charset=utf-8",
+                        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                        url: "{% url 'cart:cart_add' %}",
+                        data: {quantity: x, user_id: y, item_id: a},
+                        success: function(msg){
+                            console.log('msg:', msg.result);
+                        }
+
+                    });
+                    // alart('Item added to cart.');
                 });
             });
         </script>
