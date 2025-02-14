@@ -58,13 +58,14 @@
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
-                                    <input type="text" id="user_id" class="form-control form-control-sm text-center border-0" value="{{ user.id }}">
-                                    <input type="text" id="user_id" class="form-control form-control-sm text-center border-0" value="{{ item.id }}">
+                                    
                                 </div>
+                                <input type="text" id="user_id" class="form-control form-control-sm text-center border-0" value="{{ user.id }}">
+                                <input type="text" id="item_id" class="form-control form-control-sm text-center border-0" value="{{ item.id }}">
                                 {% if user.is_authenticated %}
                                 <!-- <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a> -->
                                 <!-- <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a> -->
-                                <button type="button" id="addtocart" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</button>
+                                <button type="button" id="addtocartbtn" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</button>
                                 {% endif %}
                             </div>
                             <div class="col-lg-12">
@@ -508,6 +509,27 @@
             </div>
         </div>
         <!-- Single Product End -->
+
+        <script>
+        // $(document).ready(function(){
+        //     $('#addtocartbtn').click(function(){
+        //         console.log('Btn', 'Success');
+        //     });
+        // });
+
+
+            $(function(){
+                $('#addtocartbtn').click(function(){
+                    let x = $('#quantity').val();
+                    let y = $('#user_id').val();
+                    console.log(
+                        'quantity:', x,
+                        'user_id:', y,
+                    );
+                });
+            });
+        </script>
+
         {% endblock content %}
 
 
