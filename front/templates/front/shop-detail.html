@@ -46,7 +46,7 @@
                                 </div>
                                 <p class="mb-4">{{ item.description }}</p>
                                 <!-- <p class="mb-4">Susp endisse ultricies nisi vel quam suscipit. Sabertooth peacock flounder; chain pickerel hatchetfish, pencilfish snailfish</p> -->
-                                <div class="input-group quantity mb-5" style="width: 100px;">
+                                <div hidden class="input-group quantity mb-5" style="width: 100px;">
                                     <div class="input-group-btn">
                                         <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
                                             <i class="fa fa-minus"></i>
@@ -60,8 +60,8 @@
                                     </div>
                                     
                                 </div>
-                                <input type="text" id="user_id" class="form-control form-control-sm text-center border-0" value="{{ user.id }}">
-                                <input type="text" id="item_id" class="form-control form-control-sm text-center border-0" value="{{ item.id }}">
+                                <input hidden type="text" id="user_id" class="form-control form-control-sm text-center border-0" value="{{ user.id }}">
+                                <input hidden type="text" id="item_id" class="form-control form-control-sm text-center border-0" value="{{ item.id }}">
                                 {% if user.is_authenticated %}
                                 <!-- <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a> -->
                                 <!-- <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a> -->

@@ -26,12 +26,11 @@ def cart_add(request):
 
         if request.method == 'POST':
             user = request.user
-            quantity = request.POST['quantity']
+            # quantity = request.POST['quantity']
             item_id = int(request.POST['item_id'])
             item = Item.objects.get(id=item_id)
-            print(type(user), quantity, type(item))
-            cart_entry = CartItem(item=item, quantity=int(
-                quantity), user=user)
+            print(type(user), type(item))
+            cart_entry = CartItem(item=item, user=user)
             cart_entry.save()
             # return HttpResponse('Item Added to Cart.')
         else:

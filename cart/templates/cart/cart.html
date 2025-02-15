@@ -46,16 +46,16 @@ Cart Details
                                 <p class="mb-0 mt-4">{{ item.item.name }}</p>
                             </td>
                             <td>
-                                <p class="mb-0 mt-4">{{ item.item.price }} $</p>
+                                <p id="rate" class="mb-0 mt-4">{{ item.item.price }} $</p>
                             </td>
                             <td>
-                                <div class="input-group quantity mt-4" style="width: 100px;">
+                                <div id="quantity" class="input-group quantity mt-4" style="width: 100px;">
                                     <div class="input-group-btn">
                                         <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
                                         <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm text-center border-0" value="{{ item.quantity }}">
+                                    <input id="qt-input" type="text" class="form-control form-control-sm text-center border-0" value=0>
                                     <div class="input-group-btn">
                                         <button class="btn btn-sm btn-plus rounded-circle bg-light border">
                                             <i class="fa fa-plus"></i>
@@ -64,7 +64,7 @@ Cart Details
                                 </div>
                             </td>
                             <td>
-                                <p class="mb-0 mt-4">2.99 $</p>
+                                <p id="item-total" class="mb-0 mt-4">{{ item.item.price }} $</p>
                             </td>
                             <td>
                                 <button class="btn btn-md rounded-circle bg-light border mt-4" >
@@ -187,6 +187,23 @@ Cart Details
         </div>
     </div>
     <!-- Cart Page End -->
+
+    <script>
+        $(function(){
+            $('#quantity button').click(function(){
+                var button = $(this);
+                let x = button.parent().parent().find('input').val();
+                let y = button.parent().parent().parent().parent().find('#rate').text().substr();
+                console.log('button', button, 'quantity', x, 'rate', y);
+            });
+        });
+        
+        
+        // $(function(){
+        //     let x = $('#quantity').val();
+        //     let y = $('#rate').val();
+        // });
+    </script>
 
 {% endblock content %}
         
