@@ -30,17 +30,28 @@ def cart_add(request):
             # quantity = request.POST['quantity']
             item_id = int(request.POST['item_id'])
             item = Item.objects.get(id=item_id)
+            print(item)
             cart_items = CartItem.objects.all()
-            for i in cart_items:
-                if i.item.name == item.name:
-                    print('yes already added')
-                    msg = {'result': 'Already Added', 'status': 'fail'}
-                    return JsonResponse(msg)
-                else:
-                    print('Not added yet')
-                    item_name = item.name
-                    msg = {'result': item_name, 'status': 'success'}
-                    return JsonResponse(msg)
+            cart_item_list = [i.item.name for i in cart_items]
+            print(cart_item_list)
+            # for i in cart_items:
+            if item.name in cart_item_list:
+                print('yes already added')
+                msg = {'result': 'Already Added', 'status': 'fail'}
+                return JsonResponse(msg)
+            else:
+                print('Not added yet')
+                cart_entry = CartItem(item=item, user=user)
+                cart_entry.save()
+                item_name = item.name
+                msg = {'result': item_name, 'status': 'success'}
+                return JsonResponse(msg)
+
+                # print('Not added yet')
+
+                # item_name = item.name
+                # msg = {'result': item_name, 'status': 'success'}
+                # return JsonResponse(msg)
             # print(cart_items)
             # if item in cart_items:
             #     print('Yes')
@@ -48,8 +59,7 @@ def cart_add(request):
             #     print('No')
 
             # print(type(user), type(item))
-            # cart_entry = CartItem(item=item, user=user)
-            # cart_entry.save()
+
             # return HttpResponse('Item Added to Cart.')
         else:
             print('Not Working')
@@ -57,6 +67,7 @@ def cart_add(request):
     # return JsonResponse(msg)
 
 
+@login_required
 def cart_delete(request):
     if request.method == 'POST':
         user_id = int(request.POST['user_id'])
@@ -68,8 +79,8 @@ def cart_delete(request):
         # return redirect('cart:cart_detail', user_id=user_id)
         # return redirect('front:home')
 
-    msg = {'result': cart_item_name}
-    return JsonResponse(msg)
+        msg = {'result': cart_item_name}
+        return JsonResponse(msg)
 
 
 def cart_update(request):

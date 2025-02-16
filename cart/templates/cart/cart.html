@@ -107,7 +107,7 @@ Cart Details
                                     <i class="fa fa-times text-danger">{{ cart_item.id }}</i>
                                 </button> -->
                                 <button id="remove-item" class="btn btn-md rounded-circle bg-light border mt-4" data-toggle="modal" data-target="#exampleModal" cart-item-id="{{ cart_item.id }}" cart-user-id="{{ cart_item.user.id }}">
-                                    <i class="fa fa-times text-danger">{{ cart_item.id }}</i>
+                                    <i class="fa fa-times text-danger"></i>
                                   </button>
                             </td>
                         </tr>
@@ -187,7 +187,7 @@ Cart Details
 
             });
         });
-        
+
         $('#modal-close-btn').click(function(){
             location.reload();
         });
