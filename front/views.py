@@ -9,11 +9,11 @@ from cart.models import CartItem
 
 def index(request):
     all_items = Item.objects.all()
-    user = request.user
-    if user:
-        all_cart_items = CartItem.objects.filter(user=user.id)
-        cart_item_count = len(all_cart_items)
-        print(f'Cart Items:{cart_item_count}')
+    # user = request.user
+    # if user:
+    #     all_cart_items = CartItem.objects.filter(user=user.id)
+    #     cart_item_count = len(all_cart_items)
+    #     print(f'Cart Items:{cart_item_count}')
     for item in all_items:
         print(item.price)
         print(item.category, type(item.category))
