@@ -36,9 +36,9 @@ Cart Details
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-body text-info" id="exampleModalLabel">
-                    Item 
+                    <!-- Item 
                     <strong id="modal-item-name"></strong>
-                    is removed.
+                    is removed. -->
                   </h5>
                   <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -57,6 +57,8 @@ Cart Details
 
 
         <div class="container py-5">
+            {% if cart_items %}
+                
             
             <div class="table-responsive">
                 <table class="table">
@@ -70,7 +72,7 @@ Cart Details
                         <th scope="col">Handle</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <!-- <tbody>
                         {% for cart_item in cart_items %}
                         <tr>
                             <th scope="row">
@@ -103,10 +105,52 @@ Cart Details
                                 <p id="item-total" per-item-total="" class="mb-0 mt-4">{{ cart_item.item.price }} $</p>
                             </td>
                             <td>
+                                <button id="remove-item" class="btn btn-md rounded-circle bg-light border mt-4" data-toggle="modal" data-target="#exampleModal" cart-item-id="{{ cart_item.id }}" cart-user-id="{{ cart_item.user.id }}">
+                                    <i class="fa fa-times text-danger"></i>
+                                  </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody> -->
+                    
+                    
+                    <tbody>
+                        {% for item in cart_items %}
+                        <tr>
+                            <th scope="row">
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ item.image.url }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                </div>
+                            </th>
+                            <td>
+                                <p id="cart-item-name" class="mb-0 mt-4">{{ item.name }}</p>
+                            </td>
+                            <td>
+                                <p id="rate" rate="{{ item.price }}" class="mb-0 mt-4">{{ item.price }} $</p>
+                            </td>
+                            <td>
+                                <div id="quantity" class="input-group quantity mt-4" style="width: 100px;">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
+                                        <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                    <input id="qt-input" type="text" class="form-control form-control-sm text-center border-0" value=1>
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <p id="item-total" per-item-total="" class="mb-0 mt-4">{{ item.price }} $</p>
+                            </td>
+                            <td>
                                 <!-- <button class="btn btn-md rounded-circle bg-light border mt-4" id="remove-item" item-id="{{ cart_item.id }}" >
                                     <i class="fa fa-times text-danger">{{ cart_item.id }}</i>
                                 </button> -->
-                                <button id="remove-item" class="btn btn-md rounded-circle bg-light border mt-4" data-toggle="modal" data-target="#exampleModal" cart-item-id="{{ cart_item.id }}" cart-user-id="{{ cart_item.user.id }}">
+                                <button id="remove-item" class="btn btn-md rounded-circle bg-light border mt-4" data-toggle="modal" data-target="#exampleModal" value="{{ item.id }}" >
                                     <i class="fa fa-times text-danger"></i>
                                   </button>
                             </td>
@@ -114,7 +158,13 @@ Cart Details
                         {% endfor %}
                     </tbody>
                 </table>  
-            </div>   
+            </div>
+            {% else %}
+            <div>
+                <h3 class="font-weight-bold text-center mb-5 border">There is no item in Cart</h3>
+            </div>
+            
+            {% endif %}  
             <!-- <div class="mt-5">
                 <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
                 <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="button">Apply Coupon</button>
@@ -161,32 +211,56 @@ Cart Details
                 $(target).text(total.toFixed(2) +' '+'$');
             });
         });
-        
-        $(document).ready(function(){
-            $('.table').on('click', '#remove-item', function(){
-                var button = $(this);
-                var cartItemId = button.attr('cart-item-id');
-                var cartUserId = button.attr('cart-user-id');
-                // var cartItemName = button.parent().parent().parent().parent().find('#cart-item-name').text();
-                console.log('button', button, 'cart-item-id:', cartItemId, 'User-id:', cartUserId);
-                // var alartMsg = alert('Item-id: '+ itemId + ' is removed.')
-                // $('#modal-item-name').text(cartItemName)
-            
+
+        $(function(){
+            // $('.table').on('click', '#remove-item', function(){
+            //     var itemId = $(this).val();
+            //     console.log('item id', itemId);
+            // });
+            $('.table #remove-item').click(function(){
+                var itemId = $(this).val();
+                console.log('item id', itemId);
                 $.ajax({
                     type: 'POST',
                     headers: {'X-CSRFToken': '{{ csrf_token }}'},
                     url: '{% url "cart:cart_delete" %}',
-                    data: {cart_item_id: cartItemId, user_id: cartUserId},
+                    data: {item_id: itemId},
                     success: function(msg){
-                        console.log('msg:', msg.result);
-                        $('#modal-item-name').text(msg.result);
-                        
+                        $('h5.modal-body').text(msg.status);
+                        console.log(msg.status);
+                    },
+                    error: function(xhr, errmsg, err){
+
                     }
                 });
-
-
             });
         });
+        
+        // $(document).ready(function(){
+        //     $('.table').on('click', '#remove-item', function(){
+        //         var button = $(this);
+        //         var cartItemId = button.attr('cart-item-id');
+        //         var cartUserId = button.attr('cart-user-id');
+        //         // var cartItemName = button.parent().parent().parent().parent().find('#cart-item-name').text();
+        //         console.log('button', button, 'cart-item-id:', cartItemId, 'User-id:', cartUserId);
+        //         // var alartMsg = alert('Item-id: '+ itemId + ' is removed.')
+        //         // $('#modal-item-name').text(cartItemName)
+            
+        //         $.ajax({
+        //             type: 'POST',
+        //             headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        //             url: '{% url "cart:cart_delete" %}',
+        //             data: {cart_item_id: cartItemId, user_id: cartUserId},
+        //             success: function(msg){
+        //                 console.log('msg:', msg.result);
+        //                 $('#modal-item-name').text(msg.result);
+                        
+        //             }
+        //         });
+
+
+        //     });
+        // });
 
         $('#modal-close-btn').click(function(){
             location.reload();

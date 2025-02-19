@@ -595,6 +595,7 @@
                         success: function(json){
                             console.log(json['status'])
                             $('h5.modal-body').text(json.status);
+                            $('#cart-item-count').text(json.count)
                         },
 
                         error: function(xhr, errmsg, err){
