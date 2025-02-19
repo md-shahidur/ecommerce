@@ -1,4 +1,4 @@
-class Cart:
+class Cart():
     def __init__(self, request):
         self.session = request.session
 
@@ -14,3 +14,15 @@ class Cart:
         # Make cart available in all pages
 
         self.cart = cart
+
+    def add(self, item):
+        item_id = str(item.id)
+
+        # Logic to check if Item is already in Cart
+        if item_id in self.cart:
+            msg = 'yes'
+            return msg
+        else:
+            self.cart[item_id] = {'name': item.name, 'price': str(item.price)}
+
+        self.session.modified = True

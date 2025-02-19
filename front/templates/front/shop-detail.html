@@ -25,9 +25,10 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-body text-info" id="exampleModalLabel">
-                    Item 
+                    <!-- Item 
                     <strong id="modal-item-name"></strong>
-                    is Added to Cart.
+                    is Added to Cart. -->
+                    <!-- <p id="json-msg"></p> -->
                   </h5>
                   <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -546,39 +547,81 @@
         // });
 
 
-            $(function(){
+            // $(function(){
+            //     $('#addtocartbtn').click(function(){
+            //         let x = $('#quantity').val();
+            //         let y = $('#user_id').val();
+            //         let a = $('#item_id').val();
+            //         console.log(
+            //             'quantity:', x,
+            //             'user_id:', y,
+            //             'item_id:', a,
+            //         );
+            //         $.ajax({
+            //             type: "POST",
+            //             // contentType: "application/json; charset=utf-8",
+            //             headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            //             url: "{% url 'cart:cart_add' %}",
+            //             data: {quantity: x, user_id: y, item_id: a},
+            //             success: function(msg){
+            //                 if (msg['status'] == 'success') {
+            //                     console.log('msg:', msg.result);
+            //                     $('#modal-item-name').text(msg.result);
+            //                 }
+            //                 else if (msg['status'] == 'fail') {
+            //                     console.log('msg:', msg.result);
+            //                     $(".modal-header").html('<h5 class="modal-body text-info" id="exampleModalLabel">Item is already added to Cart.</h5>');
+                                
+            //                 }
+                            
+            //             }
+
+            //         });
+            //         // alart('Item added to cart.');
+            //     });
+            // });
+
+            // Ajax for adding Item in Cart session
+
+            $(document).ready(function(){
+                // e.preventDefault();
                 $('#addtocartbtn').click(function(){
-                    let x = $('#quantity').val();
-                    let y = $('#user_id').val();
-                    let a = $('#item_id').val();
-                    console.log(
-                        'quantity:', x,
-                        'user_id:', y,
-                        'item_id:', a,
-                    );
+                    var itemId = $('#item_id').val();
                     $.ajax({
-                        type: "POST",
-                        // contentType: "application/json; charset=utf-8",
+                        type: 'POST',
                         headers: {'X-CSRFToken': '{{ csrf_token }}'},
                         url: "{% url 'cart:cart_add' %}",
-                        data: {quantity: x, user_id: y, item_id: a},
-                        success: function(msg){
-                            if (msg['status'] == 'success') {
-                                console.log('msg:', msg.result);
-                                $('#modal-item-name').text(msg.result);
-                            }
-                            else if (msg['status'] == 'fail') {
-                                console.log('msg:', msg.result);
-                                $(".modal-header").html('<h5 class="modal-body text-info" id="exampleModalLabel">Item is already added to Cart.</h5>');
-                                
-                            }
-                            
-                        }
+                        data: {item_id: itemId},
+                        success: function(json){
+                            console.log(json['status'])
+                            $('h5.modal-body').text(json.status);
+                        },
 
+                        error: function(xhr, errmsg, err){
+
+                        }
                     });
-                    // alart('Item added to cart.');
                 });
+
             });
+
+            // $(function(){
+            //     var itemId = $('#item_id').val();
+            //     $.ajax({
+            //         type: 'POST',
+            //         headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            //         url: "{% url 'cart:cart_add' %}",
+            //         data: {item_id: itemId},
+            //         success: function(json){
+            //             console.log(json)
+            //         },
+
+            //         error: function(xhr, errmsg, err){
+
+            //         }
+            //     });
+            // });
+
         </script>
 
         {% endblock content %}
