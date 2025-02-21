@@ -131,20 +131,20 @@ Cart Details
                             <td>
                                 <div id="quantity" class="input-group quantity mt-4" style="width: 100px;">
                                     <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
+                                        <button id="sum" class="btn btn-sm btn-minus rounded-circle bg-light border" >
                                         <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
                                     <input id="qt-input" type="text" class="form-control form-control-sm text-center border-0" value=1>
                                     <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                        <button id="sum" class="btn btn-sm btn-plus rounded-circle bg-light border">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <p id="item-total" per-item-total="" class="mb-0 mt-4">{{ item.price }} $</p>
+                                <p id="item-total" per-item-total="{{ item.price }}" class="total mb-0 mt-4">{{ item.price }} $</p>
                             </td>
                             <td>
                                 <!-- <button class="btn btn-md rounded-circle bg-light border mt-4" id="remove-item" item-id="{{ cart_item.id }}" >
@@ -153,6 +153,9 @@ Cart Details
                                 <button id="remove-item" class="btn btn-md rounded-circle bg-light border mt-4" data-toggle="modal" data-target="#exampleModal" value="{{ item.id }}" >
                                     <i class="fa fa-times text-danger"></i>
                                   </button>
+                                <!-- <button id="sum" class="btn btn-md rounded-circle bg-light border mt-4">
+                                    <i class="fa fa-times text-danger"></i>
+                                </button> -->
                             </td>
                         </tr>
                         {% endfor %}
@@ -200,6 +203,8 @@ Cart Details
     <!-- Cart Page End -->
 
     <script>
+
+        // Change Quantity total
         $(function(){
             $('#quantity button').click(function(){
                 var button = $(this);
@@ -207,11 +212,15 @@ Cart Details
                 let y = parseFloat(button.parent().parent().parent().parent().find('#rate').attr('rate'));
                 let total = parseFloat(x * y)
                 target = button.parent().parent().parent().parent().find('#item-total')
-                console.log('button', button, 'quantity:', x, 'rate:', y, 'total:', total);
+                // console.log('button', button, 'quantity:', x, 'rate:', y, 'total:', total);
                 $(target).text(total.toFixed(2) +' '+'$');
+                // $(target).val(total);
+                $(target).attr('per-item-total', total);
+
             });
         });
 
+        // Remove button Function
         $(function(){
             // $('.table').on('click', '#remove-item', function(){
             //     var itemId = $(this).val();
@@ -262,6 +271,7 @@ Cart Details
         //     });
         // });
 
+        // Modal Close button function
         $('#modal-close-btn').click(function(){
             location.reload();
         });
@@ -279,6 +289,28 @@ Cart Details
         //     let x = $('#quantity').val();
         //     let y = $('#rate').val();
         // });
+
+        // Total of all item price
+
+        $(function calculateSum(){
+            sum = 0;
+            $('table #item-total').each(function(){
+                    console.log('Value', $(this).attr('per-item-total'));
+                    sum = parseInt(sum) + (parseInt($(this).attr('per-item-total')) || 0)
+                });
+            console.log('Sum', sum)
+        });
+
+        $(function(){
+            $('.table #sum').click(function(){
+                sum = 0;
+                $('table #item-total').each(function(){
+                    console.log('Value', $(this).attr('per-item-total'));
+                    sum = parseInt(sum) + (parseInt($(this).attr('per-item-total')) || 0)
+                });
+                console.log('Sum', sum) 
+            });
+        });
 
     </script>
 

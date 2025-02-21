@@ -72,6 +72,7 @@ def cart_detail(request, user_id):
 #     # return JsonResponse(msg)
 
 
+@login_required
 def cart_add(request):
     # Get Cart class object
     cart = Cart(request)
@@ -86,14 +87,12 @@ def cart_add(request):
         # Add Item to Cart object
         item_to_cart = cart.add(item=item)
         cart_item_count = cart.__len__()
-        # Save Item in Cart DB also
-        cart_db_items = CartItem.objects.filter(item=item)
-        print(cart_db_items)
+
         # Check Item is exist
-        if cart_db_items:
-            print('Item already in db')
-        else:
-            print('Need to add in Cart db')
+        # if cart_db_items:
+        #     print('Item already in db')
+        # else:
+        #     print('Need to add in Cart db')
 
         if item_to_cart == 'yes':
             response = JsonResponse(
@@ -101,6 +100,9 @@ def cart_add(request):
         else:
             response = JsonResponse(
                 {'status': f'{item.name} is added to the Cart.', 'count': cart_item_count})
+            # Save Item in Cart DB also
+            cart_db_entry = CartItem(item=item, user=request.user)
+            cart_db_entry.save()
         return response
 
 
@@ -129,7 +131,9 @@ def cart_delete(request):
         # Use item id to remove from cart
 
         remove_item = cart.remove(item_id)
-        print(remove_item)
+        cart_db = CartItem.objects.get(item=int(item_id))
+        cart_db.delete()
+        # print(remove_item)
         msg = {'status': remove_item}
         return JsonResponse(msg)
 

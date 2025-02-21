@@ -52,3 +52,20 @@ class Cart:
         items = Item.objects.filter(id__in=item_ids)
 
         return items
+
+    def db_to_cart(self, item_id, user):
+        user_id = user.id
+        if self.cart:
+            pass
+        else:
+            cart_db_items = CartItem.objects.filter(user=user_id)
+            for i in cart_db_items:
+                # print(i.item.id)
+                # print(item_id)
+                if i.item.id in item_id:
+                    print('yes item matched')
+                    self.cart[str(i.item.id)] = {
+                        'name': i.item.name, 'price': str(i.item.price)}
+                    self.session.modified = True
+                else:
+                    print('Not matched from db')
