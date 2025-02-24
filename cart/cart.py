@@ -31,6 +31,8 @@ class Cart:
             return msg
         else:
             self.cart[item_id] = {'name': item.name, 'price': str(item.price)}
+            # self.cart[item_id] = {'name': item.name,
+            #                       'price': str(item.price), 'qty': str(qty)}
 
         self.session.modified = True
 

@@ -10,6 +10,7 @@ class CartItem(models.Model):
         Item, on_delete=models.CASCADE, related_name='item')
     # quantity = models.PositiveIntegerField(default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # qty = models.PositiveIntegerField(default=1)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

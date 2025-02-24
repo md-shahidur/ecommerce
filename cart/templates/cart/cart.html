@@ -131,13 +131,13 @@ Cart Details
                             <td>
                                 <div id="quantity" class="input-group quantity mt-4" style="width: 100px;">
                                     <div class="input-group-btn">
-                                        <button id="sum" class="btn btn-sm btn-minus rounded-circle bg-light border" >
+                                        <button id="qty-change" class="btn btn-sm btn-minus rounded-circle bg-light border" >
                                         <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
                                     <input id="qt-input" type="text" class="form-control form-control-sm text-center border-0" value=1>
                                     <div class="input-group-btn">
-                                        <button id="sum" class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                        <button id="qty-change" class="btn btn-sm btn-plus rounded-circle bg-light border">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
@@ -180,21 +180,21 @@ Cart Details
                             <h1 class="display-6 mb-4">Cart <span class="fw-normal">Total</span></h1>
                             <div class="d-flex justify-content-between mb-4">
                                 <h5 class="mb-0 me-4">Subtotal:</h5>
-                                <p id="subtotal" class="mb-0">$96.00</p>
+                                <p id="subtotal" class="mb-0"></p>
                             </div>
                             <div class="d-flex justify-content-between">
                                 <h5 class="mb-0 me-4">Delivery Charge</h5>
                                 <div class="">
-                                    <p id="delivery" class="mb-0">Flat rate: BDT 60.00</p>
+                                    <p id="delivery" data-value="60.00" class="mb-0">Flat rate: BDT 60.00</p>
                                 </div>
                             </div>
                             <!-- <p class="mb-0 text-end">Shipping to Ukraine.</p> -->
                         </div>
                         <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                             <h5 class="mb-0 ps-4 me-4">Total</h5>
-                            <p id="final-total" class="mb-0 pe-4">$99.00</p>
+                            <p id="grand-total" class="mb-0 pe-4"></p>
                         </div>
-                        <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="button">Proceed Checkout</button>
+                        <button id="checkout" class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="button">Proceed Checkout</button>
                     </div>
                 </div>
             </div>
@@ -293,37 +293,54 @@ Cart Details
         // Total of all item price
 
         $(function(){
-            sum = 0;
+            subTotal = 0;
+            dCharge = $('#delivery').attr('data-value');
             $('table #item-total').each(function(){
                     console.log('Value', $(this).attr('per-item-total'));
-                    sum = (parseFloat(sum) + (parseFloat($(this).attr('per-item-total')) || 0)).toFixed(2)
+                    subTotal = (parseFloat(subTotal) + (parseFloat($(this).attr('per-item-total')) || 0)).toFixed(2)
                 });
+                grandTotal = (parseFloat(subTotal) + parseFloat(dCharge)).toFixed(2)
+            console.log('Subtotal', subTotal, 'Grand Total:', grandTotal)
             // Put in the subtotal field for 1st time
-            $('p#subtotal').text('$'+ sum)
-            $('p#subtotal').attr('data', sum)
-            console.log('Sum', sum)
+            $('p#subtotal').text('$'+ subTotal)
+            $('p#subtotal').attr('data', subTotal)
+            $('p#grand-total').text('$'+ grandTotal)
+            $('p#grand-total').attr('data', grandTotal)
         });
 
         $(function(){
             
-            $('.table #sum').click(function(){
-                sum = 0;
+            $('.table #qty-change').click(function(){
+                subTotal = 0;
+                dCharge = $('#delivery').attr('data-value');
                 $('table #item-total').each(function(){
                     console.log('Value', $(this).attr('per-item-total'));
-                    sum = (parseFloat(sum) + (parseFloat($(this).attr('per-item-total')) || 0)).toFixed(2)
+                    subTotal = (parseFloat(subTotal) + (parseFloat($(this).attr('per-item-total')) || 0)).toFixed(2)
                 });
-                
-                console.log('Sum', sum)
+                grandTotal = (parseFloat(subTotal) + parseFloat(dCharge)).toFixed(2)
+                console.log('Subtotal', subTotal, 'Grand Total:', grandTotal)
                 // Put in the subtotal field 
-                $('p#subtotal').text('$'+ sum)
+                $('p#subtotal').text('$'+ subTotal)
+                $('p#subtotal').attr('data', subTotal)
+                $('p#grand-total').text('$'+ grandTotal)
+                $('p#grand-total').attr('data', grandTotal)
+
             });
         });
 
-        // Calculate Grand Total
+        // Update QTY
 
-        // $(function(){
-        //     var x = 
-        // });
+        $(function(){
+            $('#checkout').click(function(){
+                var x = [];
+                var y = $('.table #qt-input').each(function(){
+                    x.push($(this).val());
+                });
+                console.log('test', x);
+            });
+        });
+
+
 
     </script>
 
