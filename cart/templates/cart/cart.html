@@ -124,6 +124,7 @@ Cart Details
                             </th>
                             <td>
                                 <p id="cart-item-name" class="mb-0 mt-4">{{ item.name }}</p>
+                                <p id="cart-item-id" class="mb-0 mt-4">{{ item.id }}</p>
                             </td>
                             <td>
                                 <p id="rate" rate="{{ item.price }}" class="mb-0 mt-4">{{ item.price }} $</p>
@@ -332,11 +333,34 @@ Cart Details
 
         $(function(){
             $('#checkout').click(function(){
-                var x = [];
-                var y = $('.table #qt-input').each(function(){
-                    x.push($(this).val());
+                var qty = [];
+                var ids = [];
+                
+                $('.table #qt-input').each(function(){
+                    qty.push($(this).val());
                 });
-                console.log('test', x);
+                $('.table #cart-item-id').each(function(){
+                    ids.push($(this).text());
+                });
+                // console.log('id', ids, 'qty', qty);
+                a = JSON.stringify({'qty': qty, 'ids': ids})
+                // b = JSON.stringify(qty)
+                console.log(a)
+                $.ajax({
+                    type: 'POST',
+                    headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                    url: "{% url 'order:order_summery' %}",
+                    // data: a,
+                    data: a,
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function(msg){
+                        console.log('msg', msg['result'])
+                    },
+                    error: function(xhr, errmsg, err){
+
+                    }
+                });
             });
         });
 
