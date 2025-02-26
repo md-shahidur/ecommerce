@@ -16,10 +16,11 @@ def index(request):
     #     cart_item_count = len(all_cart_items)
     #     print(f'Cart Items:{cart_item_count}')
     if request.user.is_authenticated:
-        item_id = [item.id for item in all_items]
+        # item_id = [item.id for item in all_items]
         # print(item_id)
         cart = Cart(request)
-        cart.db_to_cart(item_id=item_id, user=request.user)
+        # cart.db_to_cart(item_id=item_id, user=request.user)
+        cart.db_to_cart(user=request.user)
     # for item in all_items:
     #     print(item.price)
     #     print(item.category, type(item.category))

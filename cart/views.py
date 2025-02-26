@@ -18,11 +18,15 @@ def cart_detail(request, user_id):
 
     # Get Cart
     cart = Cart(request)
-    # Use fun to get items in the cart
-    cart_items = cart.get_item()
-    print(cart_items)
+
+    # Use funtion to get items in the cart
+    cart_items = cart.get_item
+    # get item quantity
+    cart_quantity = cart.get_quantity
+    print(cart_quantity)
     return render(request, 'cart/cart.html', {
         'cart_items': cart_items,
+        'cart_quantity': cart_quantity,
     })
 
 
@@ -80,12 +84,12 @@ def cart_add(request):
     # Get data back from 'add to cart' button.
     if request.method == 'POST':
         item_id = int(request.POST.get('item_id'))
-
+        qty = 1
         # Get item from DB
         item = get_object_or_404(Item, id=item_id)
 
         # Add Item to Cart object
-        item_to_cart = cart.add(item=item)
+        item_to_cart = cart.add(item=item, quantity=qty)
         cart_item_count = cart.__len__()
 
         # Check Item is exist
@@ -101,8 +105,9 @@ def cart_add(request):
             response = JsonResponse(
                 {'status': f'{item.name} is added to the Cart.', 'count': cart_item_count})
             # Save Item in Cart DB also
-            cart_db_entry = CartItem(item=item, user=request.user)
-            cart_db_entry.save()
+            # cart_db_entry = CartItem(
+            #     item=item, user=request.user, quantity=qty)
+            # cart_db_entry.save()
         return response
 
 
@@ -139,5 +144,11 @@ def cart_delete(request):
 
 
 def cart_update(request):
-
-    pass
+    cart = Cart(request)
+    if request.method == 'POST':
+        item_id = request.POST.get('item_id')
+        new_qty = request.POST.get('quantity')
+        print(item_id, new_qty)
+        cart.update_qty(item_id=item_id, quantity=new_qty)
+        msg = {'result': 'Quantity test done'}
+        return JsonResponse(msg)

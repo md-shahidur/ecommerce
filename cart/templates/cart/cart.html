@@ -115,51 +115,63 @@ Cart Details
                     
                     
                     <tbody>
-                        {% for item in cart_items %}
-                        <tr>
-                            <th scope="row">
-                                <div class="d-flex align-items-center">
-                                    <img src="{{ item.image.url }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
-                                </div>
-                            </th>
-                            <td>
-                                <p id="cart-item-name" class="mb-0 mt-4">{{ item.name }}</p>
-                                <p id="cart-item-id" class="mb-0 mt-4">{{ item.id }}</p>
-                            </td>
-                            <td>
-                                <p id="rate" rate="{{ item.price }}" class="mb-0 mt-4">{{ item.price }} $</p>
-                            </td>
-                            <td>
-                                <div id="quantity" class="input-group quantity mt-4" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button id="qty-change" class="btn btn-sm btn-minus rounded-circle bg-light border" >
-                                        <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input id="qt-input" type="text" class="form-control form-control-sm text-center border-0" value=1>
-                                    <div class="input-group-btn">
-                                        <button id="qty-change" class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <p id="item-total" per-item-total="{{ item.price }}" class="total mb-0 mt-4">{{ item.price }} $</p>
-                            </td>
-                            <td>
-                                <!-- <button class="btn btn-md rounded-circle bg-light border mt-4" id="remove-item" item-id="{{ cart_item.id }}" >
-                                    <i class="fa fa-times text-danger">{{ cart_item.id }}</i>
-                                </button> -->
-                                <button id="remove-item" class="btn btn-md rounded-circle bg-light border mt-4" data-toggle="modal" data-target="#exampleModal" value="{{ item.id }}" >
-                                    <i class="fa fa-times text-danger"></i>
-                                  </button>
-                                <!-- <button id="sum" class="btn btn-md rounded-circle bg-light border mt-4">
-                                    <i class="fa fa-times text-danger"></i>
-                                </button> -->
-                            </td>
-                        </tr>
+                        {% for key, value in cart_quantity.items %}
+                            {% for item in cart_items %}
+                                {% if key == item.id|slugify %}
+                            
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="d-flex align-items-center">
+                                                <img src="{{ item.image.url }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                            </div>
+                                        </th>
+                                        <td>
+                                            <p id="cart-item-name" class="mb-0 mt-4">{{ item.name }}</p>
+                                            <p id="cart-item-id" class="mb-0 mt-4">{{ item.id }}</p>
+                                        </td>
+                                        <td>
+                                            <p id="rate" rate="{{ item.price }}" class="mb-0 mt-4">{{ item.price }} $</p>
+                                        </td>
+                                        <td>
+                                            <div id="quantity" class="input-group quantity mt-4" style="width: 100px;">
+                                                <div class="input-group-btn">
+                                                    <button id="qty-change" class="btn btn-sm btn-minus rounded-circle bg-light border" >
+                                                    <i class="fa fa-minus"></i>
+                                                    </button>
+                                                </div>
+                                            
+                                                <input id="qt-input" type="text" class="form-control form-control-sm text-center border-0" value={{ value.quantity }}> 
+                                                
+                                                <div class="input-group-btn">
+                                                    <button id="qty-change" class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                        <i class="fa fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            
+                                            <p id="item-total" per-item-total="{{ value.subtotal }}" class="total mb-0 mt-4">{{ value.subtotal }} $</p>        
+                                            
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-md rounded-circle bg-light border mt-4" id="update-qty" item-id="{{ item.id }}" >
+                                                <i class="fa fa-times text-danger">{{ item.id }}</i>
+                                            </button>
+                                            <button id="remove-item" class="btn btn-md rounded-circle bg-light border mt-4" data-toggle="modal" data-target="#exampleModal" value="{{ item.id }}" >
+                                                <i class="fa fa-times text-danger"></i>
+                                              </button>
+                                            <!-- <button id="sum" class="btn btn-md rounded-circle bg-light border mt-4">
+                                                <i class="fa fa-times text-danger"></i>
+                                            </button> -->
+                                        </td>
+                                    </tr>
+                                    
+                                {% endif %}
+                                
+                            {% endfor %}
                         {% endfor %}
+                        
                     </tbody>
                 </table>  
             </div>
@@ -209,17 +221,41 @@ Cart Details
         $(function(){
             $('#quantity button').click(function(){
                 var button = $(this);
-                let x = parseInt(button.parent().parent().find('input').val());
-                let y = parseFloat(button.parent().parent().parent().parent().find('#rate').attr('rate'));
-                let total = parseFloat(x * y)
+                let itemId = parseInt(button.parent().parent().parent().parent().find('#cart-item-id').text())
+                let qty = parseInt(button.parent().parent().find('input').val());
+                let price = parseFloat(button.parent().parent().parent().parent().find('#rate').attr('rate'));
+                let total = parseFloat(qty * price)
                 target = button.parent().parent().parent().parent().find('#item-total')
-                // console.log('button', button, 'quantity:', x, 'rate:', y, 'total:', total);
+                // console.log('item-id', itemId, 'qty', qty);
                 $(target).text(total.toFixed(2) +' '+'$');
                 // $(target).val(total);
                 $(target).attr('per-item-total', total.toFixed(2));
+                $.ajax({
+                    type: 'POST',
+                    headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                    url: '{% url "cart:cart_update" %}',
+                    data: {item_id: itemId, quantity: qty},
+                    success: function(msg){
+                        console.log(msg.result);
+                    },
+                    error: function(xhr, errmsg, err){
+
+                    }
+                });
 
             });
         });
+
+        // Update quantity in Session
+        $(function(){
+            $('.table #update-qty').click(function(){
+                var button = $(this);
+                itemId = $(this).attr('item-id')
+                qty = button.parent().parent().find('input').val()
+                console.log('item-id', itemId, 'qty', qty)
+            });
+        });
+
 
         // Remove button Function
         $(function(){
@@ -331,38 +367,39 @@ Cart Details
 
         // Update QTY
 
-        $(function(){
-            $('#checkout').click(function(){
-                var qty = [];
-                var ids = [];
-                
-                $('.table #qt-input').each(function(){
-                    qty.push($(this).val());
-                });
-                $('.table #cart-item-id').each(function(){
-                    ids.push($(this).text());
-                });
-                // console.log('id', ids, 'qty', qty);
-                a = JSON.stringify({'qty': qty, 'ids': ids})
-                // b = JSON.stringify(qty)
-                console.log(a)
-                $.ajax({
-                    type: 'POST',
-                    headers: {'X-CSRFToken': '{{ csrf_token }}'},
-                    url: "{% url 'order:order_summery' %}",
-                    // data: a,
-                    data: a,
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    success: function(msg){
-                        console.log('msg', msg['result'])
-                    },
-                    error: function(xhr, errmsg, err){
+        // $(function(){
+        //     $('#checkout').click(function(){
+        //         var qty = [];
+        //         var ids = [];
+        //         var total = $('#grand-total').attr("data")
+        //         var subTotal = $('#subtotal').attr('data')
+        //         $('.table #qt-input').each(function(){
+        //             qty.push($(this).val());
+        //         });
+        //         $('.table #cart-item-id').each(function(){
+        //             ids.push($(this).text());
+        //         });
+        //         // console.log('id', ids, 'qty', qty);
+        //         a = JSON.stringify({'qty': qty, 'ids': ids, 'subtotal': subTotal, 'total': total})
+        //         // b = JSON.stringify(qty)
+        //         console.log(a)
+        //         $.ajax({
+        //             type: 'POST',
+        //             headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        //             url: "{% url 'order:order_summery' %}",
+        //             data: {data: a},
+        //             // data: {data:a},
+        //             // dataType: 'json',
+        //             // contentType: 'application/json',
+        //             success: function(msg){
+        //                 console.log('msg', msg['result'])
+        //             },
+        //             error: function(xhr, errmsg, err){
 
-                    }
-                });
-            });
-        });
+        //             }
+        //         });
+        //     });
+        // });
 
 
 

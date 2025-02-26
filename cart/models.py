@@ -8,9 +8,10 @@ from django.contrib.auth.models import User
 class CartItem(models.Model):
     item = models.ForeignKey(
         Item, on_delete=models.CASCADE, related_name='item')
-    # quantity = models.PositiveIntegerField(default=0)
+    quantity = models.PositiveIntegerField(default=1)
+    subtotal = models.DecimalField(max_digits=7, decimal_places=2)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # qty = models.PositiveIntegerField(default=1)
+
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
