@@ -1,6 +1,6 @@
 {% extends 'another_base.html' %}
 {% load static %}
-Cart Details
+
 {% block title %}
     Cart Details
 {% endblock title %}
@@ -208,6 +208,7 @@ Cart Details
                             <p id="grand-total" class="mb-0 pe-4"></p>
                         </div>
                         <button id="checkout" class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="button">Proceed Checkout</button>
+                        <a href="{% url 'order:checkout' %}" type="button" class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4">Procced Checkout</a>
                     </div>
                 </div>
             </div>
@@ -386,7 +387,7 @@ Cart Details
         //         $.ajax({
         //             type: 'POST',
         //             headers: {'X-CSRFToken': '{{ csrf_token }}'},
-        //             url: "{% url 'order:order_summery' %}",
+        //             url: "",
         //             data: {data: a},
         //             // data: {data:a},
         //             // dataType: 'json',
