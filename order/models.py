@@ -15,6 +15,13 @@ class Order(models.Model):
     def __str__(self):
         return f'Order - {str(self.id)}'
 
+    def save(self, *args, **kwargs):
+        if not Order.objects.count():
+            self.id = 52564
+        else:
+            self.id = Order.objects.last().id + 1
+        super(Order, self).save(*args, **kwargs)
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)

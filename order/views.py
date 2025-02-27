@@ -1,10 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 import json
 from cart.models import CartItem
 from front.models import Item
 from cart.cart import Cart
+import order
+from .models import Order, OrderItem
 
 
 # Create your views here.
@@ -39,12 +41,48 @@ def checkout(request):
         cart = Cart(request)
         cart_items = cart.get_item
         item_qty = cart.get_quantity()
-        total_of_items = 0
-        for i in item_qty.values():
-            total_of_items += float(i['subtotal'])
+        total_of_items = cart.get_item_total()
+        # for i in item_qty.values():
+        #     total_of_items += float(i['subtotal'])
         print(total_of_items)
         return render(request, 'order/checkout.html', {
             'cart_items': cart_items,
             'item_qty': item_qty,
             'subtotal': total_of_items,
         })
+
+
+def place_order(request):
+    cart = Cart(request)
+    subtotal = cart.get_item_total()
+    if request.method == 'POST':
+        value = request.POST['shipping']
+        payment = request.POST['payment']
+        total = subtotal + float(value)
+        user = request.user
+        full_name = f'{user.profile.first_name} {user.profile.last_name}'
+        new_order = Order(user=request.user,
+                          full_name=full_name, t_amount=total)
+        new_order.save()
+        items = cart.get_item()
+        item_qty = cart.get_quantity()
+        for k, v in item_qty.items():
+            for item in items:
+                if k == str(item.id):
+                    quantity = int(v['quantity'])
+                    # print(quantity, type(quantity))
+                    order_item = OrderItem(
+                        order=new_order, user=user, item=item, qty=quantity, price=item.price)
+                    order_item.save()
+        cart.remove_all(user_id=request.user.id)
+
+        # email = request.POST['email']
+        # print(value, payment, total)
+        return HttpResponse(f'Order Placed Successfully. Your Order Id - {new_order.pk}')
+
+
+def testpage(request):
+
+    return render(request, 'order/test.html', {
+
+    })

@@ -70,6 +70,15 @@ class Cart:
         self.session.modified = True
         return f'Item {item_name} removed from Cart successfully'
 
+    def remove_all(self, user_id):
+        # clear cart from session
+        cart = self.cart
+        cart.clear()
+        # clear cart from db
+        cart_db = CartItem.objects.filter(user=user_id)
+        cart_db.delete()
+        self.session.modified = True
+
     def __len__(self):
         return len(self.cart)
 
@@ -84,7 +93,15 @@ class Cart:
         quantity = self.cart
         return quantity
 
+    def get_item_total(self):
+        cart_items = self.cart
+        total_of_items = 0
+        for i in cart_items.values():
+            total_of_items += float(i['subtotal'])
+        return total_of_items
+
     # def db_to_cart(self, item_id, user):
+
     def db_to_cart(self, user):
         user_id = user.id
         if self.cart:

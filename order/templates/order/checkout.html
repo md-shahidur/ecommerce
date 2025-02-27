@@ -83,6 +83,7 @@
                                 <textarea name="text" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Oreder Notes (Optional)"></textarea>
                             </div>
                         </div>
+                </form>
                         <div class="col-md-12 col-lg-6 col-xl-5">
                             <div class="table-responsive">
                                 <table class="table">
@@ -148,30 +149,34 @@
                                             </td>
                                             <td class="py-5">
                                                 <div class="py-3 border-bottom border-top">
-                                                    <p class="mb-0 text-dark">${{ subtotal|floatformat:2 }}</p>
+                                                    <p id="subtotal" class="mb-0 text-dark" data="{{ subtotal|floatformat:2 }}">${{ subtotal|floatformat:2 }}</p>
                                                 </div>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th scope="row">
                                             </th>
+                                            <form action="{% url 'order:place_order' %}" method="POST">
+                                                {% csrf_token %}
                                             <td class="py-5">
                                                 <p class="mb-0 text-dark py-4">Shipping</p>
                                             </td>
                                             <td id="shipping" colspan="3" class="py-5">
                                                 <div class="form-check text-start">
-                                                    <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-1" name="Shipping-1" value="Shipping1">
+                                                    <input type="radio" class="form-check-input bg-primary border-0" id="shipping-1" name="shipping" value='0' aria-required="true" required>
                                                     <label class="form-check-label" for="Shipping-1">Free Shipping</label>
                                                 </div>
                                                 <div class="form-check text-start">
-                                                    <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-2" name="Shipping-1" value="Shipping2">
-                                                    <label class="form-check-label" for="Shipping-2">Flat rate: $15.00</label>
+                                                    <input type="radio" class="form-check-input bg-primary border-0" id="shipping-2" name="shipping" value='60' aria-required="true" required>
+                                                    <label class="form-check-label" for="Shipping-2">Flat rate: $60.00</label>
                                                 </div>
                                                 <div class="form-check text-start">
-                                                    <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-3" name="Shipping-1" value="Shipping3">
-                                                    <label class="form-check-label" for="Shipping-3">Local Pickup: $8.00</label>
+                                                    <input type="radio" class="form-check-input bg-primary border-0" id="shipping-3" name="shipping" value="20" aria-required="true" required>
+                                                    <label class="form-check-label" for="Shipping-3">Local Pickup: $20.00</label>
                                                 </div>
+                                                
                                             </td>
+                                            
                                         </tr>
                                         <tr>
                                             <th scope="row">
@@ -183,7 +188,7 @@
                                             <td class="py-5"></td>
                                             <td class="py-5">
                                                 <div class="py-3 border-bottom border-top">
-                                                    <p class="mb-0 text-dark">${{ subtotal|floatformat:2 }}</p>
+                                                    <p class="mb-0 text-dark" id="grand-total" data="">${{ subtotal|floatformat:2 }}</p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -193,7 +198,7 @@
                             <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                                 <div class="col-12">
                                     <div class="form-check text-start my-3">
-                                        <input type="checkbox" class="form-check-input bg-primary border-0" id="Transfer-1" name="Transfer" value="Transfer">
+                                        <input type="radio" class="form-check-input bg-primary border-0" id="Transfer-1" name="payment" value="Bank Transfer" aria-required="true" required>
                                         <label class="form-check-label" for="Transfer-1">Direct Bank Transfer</label>
                                     </div>
                                     <p class="text-start text-dark">Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.</p>
@@ -202,7 +207,7 @@
                             <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                                 <div class="col-12">
                                     <div class="form-check text-start my-3">
-                                        <input type="checkbox" class="form-check-input bg-primary border-0" id="Payments-1" name="Payments" value="Payments">
+                                        <input type="radio" class="form-check-input bg-primary border-0" id="Payments-1" name="payment" value="Check Payments" aria-required="true" required>
                                         <label class="form-check-label" for="Payments-1">Check Payments</label>
                                     </div>
                                 </div>
@@ -210,7 +215,7 @@
                             <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                                 <div class="col-12">
                                     <div class="form-check text-start my-3">
-                                        <input type="checkbox" class="form-check-input bg-primary border-0" id="Delivery-1" name="Delivery" value="Delivery">
+                                        <input type="radio" class="form-check-input bg-primary border-0" id="Delivery-1" name="payment" value="Cash on Delivery" aria-required="true" required>
                                         <label class="form-check-label" for="Delivery-1">Cash On Delivery</label>
                                     </div>
                                 </div>
@@ -218,39 +223,116 @@
                             <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                                 <div class="col-12">
                                     <div class="form-check text-start my-3">
-                                        <input type="checkbox" class="form-check-input bg-primary border-0" id="Paypal-1" name="Paypal" value="Paypal">
+                                        <input type="radio" class="form-check-input bg-primary border-0" id="Paypal-1" name="payment" value="Paypal" aria-required="true" required>
                                         <label class="form-check-label" for="Paypal-1">Paypal</label>
                                     </div>
                                 </div>
                             </div>
+                            
                             <div class="row g-4 text-center align-items-center justify-content-center pt-4">
-                                <button id="place-order" type="button" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Place Order</button>
+                                <button id="place-order" type="submit" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary" >Place Order</button>
                             </div>
+                        </form>
                         </div>
                     </div>
-                </form>
+                
             </div>
         </div>
         <!-- Checkout Page End -->
 
 
         <script>
-            $(function(){
+            // $(function(){
                 
-                $('#place-order').click(function(){
-                    checkBox = $('#Shipping-1')
-                    if($(checkBox.checked)){
-                    console.log('Status', checkBox.val())
-                    } else {
-                        console.log('Status', 'Unchecked')
-                    }
-                });
+            //     $('#place-order').click(function(){
+            //         let checkBox = $('#Shipping-1').is(":checked");
+            //         if(checkBox == true){
+            //             console.log('Status', checkBox)
+            //         } else {
+            //             console.log('Status', "uncheck")
+            //         }
+            //     });
                 
-            });
+            // });
+
 
             $(function(){
-                console.log('test', 'jquery test')
-            });
+            //    $('#shipping-1').click(function(){
+            //         let checkBox = $(this).is(":checked");
+            //         if(checkBox === true){
+            //             console.log(checkBox)
+            //         } else {
+            //             console.log(checkBox)
+            //         }
+            //     });
+                var selectedVal ="";
+                $('form #shipping').change(function(){
+                    var selected = $("#shipping input[type='radio']:checked").val();
+                    selectedVal = selected
+                    console.log(selectedVal)
+                    var subTotal = $('#subtotal').attr('data');
+                    var grandTotal = (parseFloat(subTotal) + parseFloat(selectedVal)).toFixed(2)
+                    console.log(grandTotal, selectedVal)
+                    $('p#grand-total').text('$'+ grandTotal)
+                    $('p#grand-total').attr('data', grandTotal)
+
+                });
+                
+                
+                
+               });
+            
+
+            // const check = () => {
+            // let influentials = $("#influentials-checkbox").is(":checked");
+            // let checkBox = $('#Shipping-1').is(":checked");
+            // let retweets = $("#retweets-checkbox").is(":checked");
+
+            // console.log(checkBox);
+            // };
+
+            // // Attach check function to button
+            // $("#place-order").on("click", () => {
+            // check();
+            // });
+            
+            // Total of all item price
+
+        // $(function(){
+        //     subTotal = $('#subtotal').attr('data');
+        //     // dCharge = $('#delivery').attr('data-value');
+        //     // $('table #item-total').each(function(){
+        //     //         console.log('Value', $(this).attr('per-item-total'));
+        //     //         subTotal = (parseFloat(subTotal) + (parseFloat($(this).attr('per-item-total')) || 0)).toFixed(2)
+        //     //     });
+        //         grandTotal = (parseFloat(subTotal).toFixed(2))
+        //     console.log('Subtotal', subTotal, 'Grand Total:', grandTotal)
+        //     // Put in the subtotal field for 1st time
+        //     // $('p#subtotal').text('$'+ subTotal)
+        //     // $('p#subtotal').attr('data', subTotal)
+        //     $('p#grand-total').text('$'+ grandTotal)
+        //     $('p#grand-total').attr('data', grandTotal)
+        // });
+
+        // $(function(){
+            
+        //     $('.table #qty-change').click(function(){
+        //         subTotal = 0;
+        //         // dCharge = $('#delivery').attr('data-value');
+        //         $('table #item-total').each(function(){
+        //             console.log('Value', $(this).attr('per-item-total'));
+        //             subTotal = (parseFloat(subTotal) + (parseFloat($(this).attr('per-item-total')) || 0)).toFixed(2)
+        //         });
+        //         grandTotal = (parseFloat(subTotal)).toFixed(2)
+        //         console.log('Subtotal', subTotal, 'Grand Total:', grandTotal)
+        //         // Put in the subtotal field 
+        //         $('p#subtotal').text('$'+ subTotal)
+        //         $('p#subtotal').attr('data', subTotal)
+        //         $('p#grand-total').text('$'+ grandTotal)
+        //         $('p#grand-total').attr('data', grandTotal)
+
+        //     });
+        // });
         </script>
         {% endblock content %}
 
