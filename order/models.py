@@ -28,7 +28,7 @@ class OrderItem(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, null=True, blank=True)
     item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True)
-    price = models.DecimalField(max_digits=7, decimal_places=2)
+    subtotal = models.DecimalField(max_digits=7, decimal_places=2)
     qty = models.PositiveBigIntegerField(default=1)
 
     def __str__(self):

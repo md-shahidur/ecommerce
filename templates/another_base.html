@@ -124,6 +124,7 @@
                                 <!-- <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-user fa-2x"></i></a> -->
                                 <i class="fas fa-user fa-2x nav-link" data-bs-toggle="dropdown"></i>
                                 <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                                    <a href="{% url 'order:all_orders' %}" class="dropdown-item">Orders</a>
                                     <a href="{% url 'members:profile' user.id %}" class="dropdown-item">Profile</a>
                                     <a href="{% url 'members:logout' %}" class="dropdown-item">Logout</a>
                                     <!-- <a href="testimonial.html" class="dropdown-item">Testimonial</a>

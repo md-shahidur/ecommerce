@@ -70,7 +70,7 @@ def place_order(request):
                     quantity = int(v['quantity'])
                     # print(quantity, type(quantity))
                     order_item = OrderItem(
-                        order=new_order, user=user, item=item, qty=quantity, price=item.price)
+                        order=new_order, user=user, item=item, qty=quantity, subtotal=(item.price * quantity))
                     order_item.save()
         cart.remove_all(user_id=request.user.id)
 
@@ -84,3 +84,26 @@ def testpage(request):
     return render(request, 'order/test.html', {
 
     })
+
+
+def order_detail(request):
+    pass
+
+
+def all_orders(request):
+    if request.user.is_authenticated:
+        orders = Order.objects.filter(user=request.user)
+        item_context = {
+
+        }
+        for order in orders:
+            order_items = OrderItem.objects.filter(order=order)
+            item_context[order.id] = order_items
+
+        for key, value in item_context.items():
+            for v in value:
+                print(v.item.name)
+        return render(request, 'order/orders.html', {
+            "all_orders": orders,
+            'item_context': item_context,
+        })
