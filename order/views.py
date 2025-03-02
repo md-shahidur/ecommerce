@@ -1,11 +1,9 @@
 from django.shortcuts import render, HttpResponse
-from django.http import JsonResponse
-from django.contrib.auth.models import User
-import json
-from cart.models import CartItem
-from front.models import Item
+# from django.http import JsonResponse
+# from django.contrib.auth.models import User
+# from cart.models import CartItem
 from cart.cart import Cart
-import order
+# from front.models import Item
 from .models import Order, OrderItem
 
 
