@@ -36,3 +36,12 @@ def item_detail(request, item_id):
     return render(request, 'front/shop-detail.html', {
         'item': item
     })
+
+
+def shop_page(request):
+    categories = Category.objects.all()
+    all_items = Item.objects.all()
+    return render(request, 'front/shop.html', {
+        'categories': categories,
+        'all_items': all_items
+    })
