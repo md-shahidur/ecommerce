@@ -1,9 +1,10 @@
 from django.shortcuts import render
-
 from django.contrib.auth.decorators import login_required
-from .models import Item, Category
-from cart.models import CartItem
+from django.core.paginator import Paginator
 from cart.cart import Cart
+from cart.models import CartItem
+from .models import Item, Category
+
 
 # Create your views here.
 
@@ -40,8 +41,16 @@ def item_detail(request, item_id):
 
 def shop_page(request):
     categories = Category.objects.all()
-    all_items = Item.objects.all()
+    # Get all Items
+    all_items = Item.objects.all().order_by('id')
+    # Setup paginator
+    p = Paginator(all_items, 6)
+    page = request.GET.get('page')
+    items = p.get_page(page)
+    page_range = p.page_range
+
     return render(request, 'front/shop.html', {
         'categories': categories,
-        'all_items': all_items
+        'all_items': items,
+        'page_range': page_range,
     })
